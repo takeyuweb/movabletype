@@ -50,6 +50,16 @@ sub install_properties {
         # have access to the MT configuration table in order to
         # bootstrap MT.
 
+        if ( exists $props->{child_of} ) {
+            my $parent_classes = $props->{child_of};
+            if ( !ref $parent_classes ) {
+                $parent_classes = [$parent_classes];
+            }
+            foreach my $pc (@$parent_classes) {
+                eval "require $pc;";
+            }
+        }
+
         push @PRE_INIT_PROPS, [ $class, $props ];
         return;
     }
